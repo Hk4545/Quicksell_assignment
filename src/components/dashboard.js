@@ -8,7 +8,7 @@ function Dashboard() {
  
   const [displayon, setdisplayon] = useState(false);
   const [group, setgroup] = useState("Status");
-  const [order, setorder] = useState("");
+  const [order, setorder] = useState("Priority");
 
   const handleselection = (e) => {
     e.stopPropagation();
@@ -47,7 +47,7 @@ function Dashboard() {
                 <div style={{display:"flex"}}>
                     <label>Ordering</label>
                     <select onChange={handleorder} value={order}>
-                    <option value="">Select</option>
+                    
                         <option value="Priority">Priority</option>
                         <option value="Title">Title</option>
                     </select>

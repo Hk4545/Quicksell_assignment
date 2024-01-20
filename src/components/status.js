@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./status.css";
 
 function Status(props) {
   const { order } = props;
+  const [loading, setLoading] = useState(true);
   const [user, setuser] = useState([]);
   const [tickets, settickets] = useState([]);
   const [back, setback] = useState([]);
@@ -10,6 +11,16 @@ function Status(props) {
   const [progress, setprogress] = useState([]);
   const [done, setdone] = useState([]);
   const [cancel, setcancel] = useState([]);
+
+  const arr = ["...", <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reception-1" viewBox="0 0 16 16">
+  <path d="M0 11.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+</svg>, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reception-2" viewBox="0 0 16 16">
+            <path d="M0 11.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm4 5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+            </svg>, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reception-3" viewBox="0 0 16 16">
+            <path d="M0 11.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm4 8a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+          </svg>, <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reception-4" viewBox="0 0 16 16">
+            <path d="M0 11.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5z"/>
+          </svg>]
 
   const fetchData = async () => {
     try {
@@ -20,9 +31,10 @@ function Status(props) {
       console.log(data);
       setuser(data.users);
       settickets(data.tickets);
-      console.log(data.tickets);
+       
     } catch (error) {
       console.error("Error fetching data:", error);
+      
     }
   };
 
@@ -31,16 +43,17 @@ function Status(props) {
   }, []);
 
   useEffect(() => {
-    let temp0 = tickets.filter((el) => el.status == "Backlog");
-    let temp1 = tickets.filter((el) => el.status == "Todo");
-    let temp2 = tickets.filter((el) => el.status == "In progress");
-    let temp3 = tickets.filter((el) => el.status == "Done");
-    let temp4 = tickets.filter((el) => el.status == "Canceled");
+    let temp0 = tickets.filter((el) => el.status === "Backlog");
+    let temp1 = tickets.filter((el) => el.status === "Todo");
+    let temp2 = tickets.filter((el) => el.status === "In progress");
+    let temp3 = tickets.filter((el) => el.status === "Done");
+    let temp4 = tickets.filter((el) => el.status === "Canceled");
     setback(temp0);
     settodo(temp1);
     setprogress(temp2);
     setdone(temp3);
     setcancel(temp4);
+    setLoading(!loading);
   }, [tickets]);
 
   useEffect(() => {
@@ -50,10 +63,9 @@ function Status(props) {
       if (tempa < tempb) return -1;
       if (tempa > tempb) return 1;
       return 0;
-      //sorting by title
     }
 
-    function sortbypriorty(a, b) {
+    function sortbypriority(a, b) {
       let tempa = a.priority;
       let tempb = b.priority;
       if (tempa < tempb) return -1;
@@ -61,7 +73,7 @@ function Status(props) {
       return 0;
     }
 
-    if (order == "Title") {
+    if (order === "Title") {
       setback([...back.sort((a, b) => sortbytitle(a, b))]);
       settodo([...todo.sort((a, b) => sortbytitle(a, b))]);
       setprogress([...progress.sort((a, b) => sortbytitle(a, b))]);
@@ -69,21 +81,23 @@ function Status(props) {
       setcancel([...cancel.sort((a, b) => sortbytitle(a, b))]);
     }
 
-    if (order == "Priority") {
-      setback([...back.sort((a, b) => sortbypriorty(a, b))]);
-      settodo([...todo.sort((a, b) => sortbypriorty(a, b))]);
-      setprogress([...progress.sort((a, b) => sortbypriorty(a, b))]);
-      setdone([...done.sort((a, b) => sortbypriorty(a, b))]);
-      setcancel([...cancel.sort((a, b) => sortbypriorty(a, b))]);
+    if (order === "Priority") {
+      setback([...back.sort((a, b) => sortbypriority(a, b))]);
+      settodo([...todo.sort((a, b) => sortbypriority(a, b))]);
+      setprogress([...progress.sort((a, b) => sortbypriority(a, b))]);
+      setdone([...done.sort((a, b) => sortbypriority(a, b))]);
+      setcancel([...cancel.sort((a, b) => sortbypriority(a, b))]);
     }
-  }, [order, back, todo, progress, done, cancel]);
+  }, [order, loading]);
 
   return (
     <div className="pmaindiv">
       <div className="titlecontainer">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ paddingBottom: "15px", paddingTop: "10px" }}>
-            <span style={{ color: "gray", marginLeft: "15px" }}>...</span>
+            <span style={{ color: "gray", marginLeft: "15px" }}><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="white" class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="8" cy="8" r="8"/>
+</svg></span>
             {"  "}
             <span style={{ fontSize: "14px", fontWeight: "bold" }}>
               Backlog
@@ -111,12 +125,15 @@ function Status(props) {
         </div>
         {back &&
           back.map((el, index) => {
+            let temp = user.filter((elm) => elm.id == el.userId)
             return (
               <div className="titlediv">
                 <div
-                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px" }}
+                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px", display:"flex", justifyContent:"space-between" }}
                 >
-                  {el.id}
+                  <span>{el.id}</span><span>{temp[0]?.name}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={temp[0]?.available? "green" : "red"} class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="4" cy="4" r="4"/>
+</svg></span>
                 </div>
                 <div
                   style={{
@@ -129,8 +146,8 @@ function Status(props) {
                 </div>
                 <div
                   style={{ fontSize: "13px", color: "gray", paddingTop: "7px" }}
-                >
-                  {el.tag.length > 0 ? "Feature request" : "no content"}
+                > {arr[el.priority]}
+                  {el.tag.length > 0 ? "Feature request" : ""}
                 </div>
               </div>
             );
@@ -140,7 +157,9 @@ function Status(props) {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ paddingBottom: "15px", paddingTop: "10px" }}>
             <span style={{ color: "gray", marginLeft: "15px"}}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47.5 47.5" id="circle" height="14px" width="14px"><defs><clipPath id="a"><path d="M0 38h38V0H0v38Z"></path></clipPath></defs><g clip-path="url(#a)" transform="matrix(1.25 0 0 -1.25 0 47.5)"><path fill="#e6e7e8" d="M37 19c0-9.941-8.059-18-18-18S1 9.059 1 19s8.059 18 18 18 18-8.059 18-18"></path></g></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="lightblue" class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="8" cy="8" r="8"/>
+</svg>
             </span>
             {"  "}
             <span style={{ fontSize: "14px", fontWeight: "bold" }}>
@@ -169,12 +188,15 @@ function Status(props) {
         </div>
         {todo &&
           todo.map((el, index) => {
+            let temp = user.filter((elm) => elm.id == el.userId)
             return (
               <div className="titlediv">
                 <div
-                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px" }}
+                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px",display:"flex", justifyContent:"space-between" }}
                 >
-                  {el.id}
+                  <span>{el.id}</span><span>{temp[0]?.name}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={temp[0]?.available? "green" : "red"} class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="4" cy="4" r="4"/>
+</svg></span>
                 </div>
                 <div
                   style={{
@@ -188,7 +210,7 @@ function Status(props) {
                 <div
                   style={{ fontSize: "13px", color: "gray", paddingTop: "7px" }}
                 >
-                  {el.tag.length > 0 ? "Feature request" : "no content"}
+                  {arr[el.priority]}{el.tag.length > 0 ? "Feature request" : ""}
                 </div>
               </div>
             );
@@ -197,7 +219,9 @@ function Status(props) {
       <div className="titlecontainer">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ paddingBottom: "15px", paddingTop: "10px" }}>
-            <span style={{ color: "gray", marginLeft: "15px" }}>...</span>
+            <span style={{ color: "gray", marginLeft: "15px" }}><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="blue" class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="8" cy="8" r="8"/>
+</svg></span>
             {"  "}
             <span style={{ fontSize: "14px", fontWeight: "bold" }}>
               In Progress
@@ -225,12 +249,15 @@ function Status(props) {
         </div>
         {progress &&
           progress.map((el, index) => {
+            let temp = user.filter((elm) => elm.id == el.userId)
             return (
               <div className="titlediv">
                 <div
-                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px" }}
+                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px", display:"flex", justifyContent:"space-between" }}
                 >
-                  {el.id}
+                  <span>{el.id}</span><span>{temp[0]?.name}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={temp[0]?.available? "green" : "red"} class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="4" cy="4" r="4"/>
+</svg></span>
                 </div>
                 <div
                   style={{
@@ -244,7 +271,7 @@ function Status(props) {
                 <div
                   style={{ fontSize: "13px", color: "gray", paddingTop: "7px" }}
                 >
-                  {el.tag.length > 0 ? "Feature request" : "no content"}
+                  {arr[el.priority]}{el.tag.length > 0 ? "Feature request" : ""}
                 </div>
               </div>
             );
@@ -254,7 +281,9 @@ function Status(props) {
       <div className="titlecontainer">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ paddingBottom: "15px", paddingTop: "10px" }}>
-            <span style={{ color: "gray", marginLeft: "15px" }}>...</span>
+            <span style={{ color: "gray", marginLeft: "15px" }}><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="black" class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="8" cy="8" r="8"/>
+</svg></span>
             {"  "}
             <span style={{ fontSize: "14px", fontWeight: "bold" }}>
               Done
@@ -282,12 +311,15 @@ function Status(props) {
         </div>
         {done &&
           done.map((el, index) => {
+            let temp = user.filter((elm) => elm.id == el.userId)
             return (
               <div className="titlediv">
                 <div
-                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px" }}
+                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px", display:"flex", justifyContent:"space-between" }}
                 >
-                  {el.id}
+                  <span>{el.id}</span><span>{temp[0]?.name}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={temp[0]?.available? "green" : "red"} class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="4" cy="4" r="4"/>
+</svg></span>
                 </div>
                 <div
                   style={{
@@ -301,7 +333,7 @@ function Status(props) {
                 <div
                   style={{ fontSize: "13px", color: "gray", paddingTop: "7px" }}
                 >
-                  {el.tag.length > 0 ? "Feature request" : "no content"}
+                  {arr[el.priority]}{el.tag.length > 0 ? "Feature request" : ""}
                 </div>
               </div>
             );
@@ -311,7 +343,9 @@ function Status(props) {
       <div className="titlecontainer">
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ paddingBottom: "15px", paddingTop: "10px" }}>
-            <span style={{ color: "gray", marginLeft: "15px" }}>...</span>
+            <span style={{ color: "gray", marginLeft: "15px" }}><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+</svg></span>
             {"  "}
             <span style={{ fontSize: "14px", fontWeight: "bold" }}>
               Canceled
@@ -339,12 +373,15 @@ function Status(props) {
         </div>
         {cancel &&
           cancel.map((el, index) => {
+            let temp = user.filter((elm) => elm.id == el.userId)
             return (
               <div className="titlediv">
                 <div
-                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px" }}
+                  style={{ fontSize: "13px", color: "gray", paddingTop: "5px", display:"flex", justifyContent:"space-between" }}
                 >
-                  {el.id}
+                  <span>{el.id}</span><span>{temp[0]?.name}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={temp[0]?.available? "green" : "red"} class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="4" cy="4" r="4"/>
+</svg></span>
                 </div>
                 <div
                   style={{
@@ -358,7 +395,7 @@ function Status(props) {
                 <div
                   style={{ fontSize: "13px", color: "gray", paddingTop: "7px" }}
                 >
-                  {el.tag.length > 0 ? "Feature request" : "no content"}
+                  {arr[el.priority]}{el.tag.length > 0 ? "Feature request" : ""}
                 </div>
               </div>
             );
