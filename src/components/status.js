@@ -50,6 +50,7 @@ function Status(props) {
       if (tempa < tempb) return -1;
       if (tempa > tempb) return 1;
       return 0;
+      //sorting by title
     }
 
     function sortbypriorty(a, b) {
