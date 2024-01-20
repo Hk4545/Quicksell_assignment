@@ -7,8 +7,10 @@ import User from "./user";
 function Dashboard() {
  
   const [displayon, setdisplayon] = useState(false);
-  const [group, setgroup] = useState("Status");
-  const [order, setorder] = useState("Priority");
+  const storedGroup = sessionStorage.getItem("group") || "Status";
+  const storedOrder = sessionStorage.getItem("order") || "Priority";
+  const [group, setgroup] = useState(storedGroup);
+  const [order, setorder] = useState(storedOrder);
 
   const handleselection = (e) => {
     e.stopPropagation();
@@ -17,10 +19,12 @@ function Dashboard() {
 
   const handlegroup = (e) => {
     setgroup(e.target.value);
+    sessionStorage.setItem("group", e.target.value);
   }
 
   const handleorder = (e) => {
     setorder(e.target.value);
+    sessionStorage.setItem("order", e.target.value);
   }
   const handlebtn = () => {
     setdisplayon(false);
