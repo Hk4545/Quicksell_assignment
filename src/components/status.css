@@ -1,0 +1,20 @@
+.pmaindiv {
+    display: flex;
+    /* justify-content: space-evenly; */
+    margin-left: 1%;
+  }
+  
+  .titlediv {
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-left: 10px;
+    min-height:130px;
+  }
+  
+  .titlecontainer {
+    width: 20%;
+    
+  }
+  

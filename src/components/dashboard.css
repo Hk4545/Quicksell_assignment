@@ -1,0 +1,57 @@
+.main{
+   width: 100%;
+   height: auto;
+   /* border: 1px solid black; */
+}
+
+.displaydiv{
+    margin-top: 10px;
+    min-width: 99.5%;
+    /* margin-left: 2%; */
+    height: 50px;
+    border: 1px solid rgb(193, 190, 190);
+}
+
+.displaydropdown{
+    position: absolute;
+    border: 1px solid rgb(161, 157, 157);
+    margin-top: 10px;
+    padding: 15px;
+    margin-left: 2%;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.displaydropdown div{
+    display: flex;
+    width:30%;
+    gap: 50px;
+    margin-top: 20px;
+}
+
+.displaydropdown div select{
+    border: 1px solid rgb(236, 212, 212);
+    border-radius: 5px;
+    padding: 3px;
+    margin-top: 3px;
+}
+
+.contentdiv{
+    background-color: rgb(218, 218, 218);
+    /* height: 20px;
+    width: 20px; */
+    margin-top: 2px;
+    padding-bottom: 5px;
+
+}
+
+.displaybutton{
+    margin-top: 10px;
+    margin-left: 2%;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 5px 10px;
+
+    /* box-shadow: inset; */
+}
